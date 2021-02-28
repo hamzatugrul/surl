@@ -54,13 +54,12 @@ public class ApplicationExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new BaseResponse(INVALID_PARAMS.getCode(), exception.getBindingResult().getFieldErrors().toString()));
-        //.body(new BaseResponse(INVALID_PARAMS.getCode(), INVALID_PARAMS.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ResponseEntity<BaseResponse> handle(HttpMessageNotReadableException exception) {
-        logger.error("Request Validation Exception:{}", exception.getMessage());
+        logger.error("Request Validation Exception:{0}", exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(INVALID_REQUEST_BODY.getCode(), INVALID_REQUEST_BODY.getMessage()));
     }
 
@@ -81,20 +80,7 @@ public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
     public ResponseEntity<BaseResponse> handle(AuthenticationException exception) {
-        logger.error("Authentication Exception:{}", exception.getMessage());
-        return new ResponseEntity<>(new BaseResponse(exception.getMessage(),
-                ResponseStatus.AUTHENTICATION_ERROR.getValue()), HttpStatus.UNAUTHORIZED);
-    }*/
-
-
-
-/*
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)  // 400
-    @ExceptionHandler
-    protected ResponseEntity<BaseResponse> handleInvalidUrlException(URISyntaxException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(false, "Invalid Url format.", BaseResponse.BAD_REQUEST));
-    }*/
-
-
+        logger.error("Authentication Exception:{0}", exception.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BaseResponse(HttpStatus.UNAUTHORIZED.value(), exception.getMessage()));
+    }
 }
