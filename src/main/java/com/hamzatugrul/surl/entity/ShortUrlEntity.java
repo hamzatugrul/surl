@@ -23,7 +23,7 @@ public class ShortUrlEntity implements Serializable {
     @Id
     private String id;
     @Indexed
-    private Long shortUrlKey;
+    private String shortUrlKey;
     @Indexed
     private String longUrl;
 
@@ -36,7 +36,7 @@ public class ShortUrlEntity implements Serializable {
     public ShortUrlEntity() {
     }
 
-    public ShortUrlEntity(Long shortUrlKey) {
+    public ShortUrlEntity(String shortUrlKey) {
         this.shortUrlKey = shortUrlKey;
     }
 
@@ -48,11 +48,11 @@ public class ShortUrlEntity implements Serializable {
         this.id = id;
     }
 
-    public Long getShortUrlKey() {
+    public String getShortUrlKey() {
         return shortUrlKey;
     }
 
-    public void setShortUrlKey(Long shortUrlKey) {
+    public void setShortUrlKey(String shortUrlKey) {
         this.shortUrlKey = shortUrlKey;
     }
 

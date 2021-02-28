@@ -12,12 +12,12 @@
 	<groupId>com.hamzatugrul</groupId>
 	<artifactId>surl</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Short URL</name>
+	<name>ShortURL</name>
 	<description>SURL is a URL Shortener System which scale out unlimited horizontally.</description>
 
 	<properties>
 		<docker.image.prefix>hamzatugrul</docker.image.prefix>
-		<java.version>15</java.version>
+		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -101,6 +101,11 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>6.0.18.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
@@ -109,8 +114,39 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.2.3</version>
+				<configuration>
+					<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+					<dockerDirectory>${project.basedir}</dockerDirectory>
+					<resources>
+						<resource>
+							<targetPath></targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
+				</configuration>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>${project.build.directory}/generated-resources/annotations</directory>
+			</resource>
+		</resources>
 	</build>
 
 </project>

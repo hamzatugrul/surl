@@ -7,6 +7,7 @@ package com.hamzatugrul.surl.enums;
 public enum EnmUrlShortenerResults {
 
     SUCCESS(0,"Success"),
+    ERROR(1,"Unexpected Error!"),
     INVALID_REQUEST_BODY(100,"Required request body is missing"),
     INVALID_PARAMS(101, "Invalid parameters in request."),
     INVALID_URL(102, "URL is not valid."),

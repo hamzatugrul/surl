@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @date 2/27/2021
  */
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -32,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     //TODO: whitelist need to modified
     private static final String[] WHITELIST = {
             // Exposed APIs
-            "/{shortPath}",
+            "/{surl}",
             "/api/v1/shortener",
             "/api/v1/status/{surl}",
             // Swagger Endpoints

@@ -14,11 +14,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ShortUrlRepository extends MongoRepository<ShortUrlEntity, String> {
-    @Cacheable(value = RedisCacheConfig.CACHE_SURL)
-    ShortUrlEntity findByShortUrlKey(Long shortUrlKey);
 
     ShortUrlEntity findByLongUrl(String longUrl);
 
-    @CachePut(value = RedisCacheConfig.CACHE_SURL, key = "#shortUrl.shortUrlKey")
-    ShortUrlEntity save(ShortUrlEntity shortUrl);
+    @Cacheable(value = RedisCacheConfig.CACHE_SURL)
+    ShortUrlEntity findByShortUrlKey(String shortUrlKey);
+
+    @CachePut(value = RedisCacheConfig.CACHE_SURL, key = "#shortUrlEntity.shortUrlKey")
+    ShortUrlEntity save(ShortUrlEntity shortUrlEntity);
 }

@@ -1,7 +1,6 @@
 package com.hamzatugrul.surl.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -17,6 +16,10 @@ public class ShortenerDTO {
     private String longUrl;
 
     private String shortURL;
+    private String shortUrlKey;
+
+    public ShortenerDTO() {
+    }
 
     @JsonCreator
     public ShortenerDTO(String longUrl) {
@@ -31,11 +34,28 @@ public class ShortenerDTO {
         this.longUrl = longUrl;
     }
 
+    public String getShortUrlKey() {
+        return shortUrlKey;
+    }
+
+    public void setShortUrlKey(String shortUrlKey) {
+        this.shortUrlKey = shortUrlKey;
+    }
+
     public String getShortURL() {
         return shortURL;
     }
 
     public void setShortURL(String shortURL) {
         this.shortURL = shortURL;
+    }
+
+    @Override
+    public String toString() {
+        return "ShortenerDTO{" +
+                "longUrl='" + longUrl + '\'' +
+                ", shortURL='" + shortURL + '\'' +
+                ", shortUrlKey='" + shortUrlKey + '\'' +
+                '}';
     }
 }
