@@ -2,10 +2,12 @@ package com.hamzatugrul.surl.service.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 
-
+@RunWith(MockitoJUnitRunner.class)
 public class Murmur3With32BitsHashKeyGeneratorTest {
 
     private static final String TEST_URL = "https://www.turkcell.com.tr/paket-ve-tarifeler/4-5-g-hizinda/yildiz-8?order=2&source=CMS";

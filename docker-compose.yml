@@ -13,6 +13,7 @@ services:
     links:
       - mongodb
       - redis
+      - logstash
     environment:
         SPRING_DATA_MONGODB_URI: mongodb://mongodb/surl
         SPRING_APPLICATION_NAME: surl-service
@@ -26,6 +27,7 @@ services:
     links:
       - mongodb
       - redis
+      - logstash
     environment:
         SPRING_DATA_MONGODB_URI: mongodb://mongodb/surl
         SPRING_APPLICATION_NAME: surl-service
@@ -43,9 +45,38 @@ services:
    - app
    - app2
 
-
   redis:
     image: redis
     ports:
       - "6379:6379"
+
+  elasticsearch:
+    build: elk/elasticsearch/
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+
+  logstash:
+    build: elk/logstash/
+    container_name: logstash
+    command: -f /etc/logstash/conf.d/
+    volumes:
+      - ./elk/logstash/config:/etc/logstash/conf.d
+    ports:
+      - "9999:9999"
+    links:
+      - elasticsearch
+
+  kibana:
+    build: elk/kibana/
+    container_name: kibana
+    volumes:
+      - ./elk/kibana/config/:/opt/kibana/config/
+    ports:
+      - "5601:5601"
+    links:
+      - elasticsearch
 

@@ -2,8 +2,8 @@ package com.hamzatugrul.surl.validator;
 
 import com.google.common.base.Strings;
 import com.hamzatugrul.surl.exception.InvalidURLException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.URI;
 import java.util.Objects;
@@ -13,7 +13,7 @@ import java.util.Objects;
  * @date 2/27/2021
  */
 public class SUrlValidator {
-    private static final Logger logger = LoggerFactory.getLogger(SUrlValidator.class);
+    private static final Logger logger = LogManager.getLogger(SUrlValidator.class);
 
     public static URI checkUrlValidityAndReturnUri(String url) throws InvalidURLException {
         try {

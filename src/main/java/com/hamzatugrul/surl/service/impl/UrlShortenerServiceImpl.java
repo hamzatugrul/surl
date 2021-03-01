@@ -8,8 +8,8 @@ import com.hamzatugrul.surl.model.StatusDTO;
 import com.hamzatugrul.surl.repository.ShortUrlRepository;
 import com.hamzatugrul.surl.service.KeyGenerator;
 import com.hamzatugrul.surl.service.UrlShortenerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @Service
 public class UrlShortenerServiceImpl implements UrlShortenerService {
-    private static final Logger logger = LoggerFactory.getLogger(UrlShortenerServiceImpl.class);
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     @Value("${surl.service.host}")
     private String serviceHost;

@@ -1,8 +1,8 @@
 package com.hamzatugrul.surl.exception;
 
 import com.hamzatugrul.surl.model.BaseErrorResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -24,7 +24,7 @@ import static com.hamzatugrul.surl.enums.EnmUrlShortenerResults.*;
 
 @ControllerAdvice
 public class ApplicationExceptionHandler {
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationExceptionHandler.class);
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
