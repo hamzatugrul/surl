@@ -32,7 +32,7 @@ public class SUrlValidator {
     }
 
     public static void checkShortURlKey(String shortUrl) throws InvalidURLException {
-        if (Strings.isNullOrEmpty(shortUrl)) {
+        if (Strings.isNullOrEmpty(shortUrl) && shortUrl.length() != 8) {
             throw new InvalidURLException("Requested URL Key is not valid!");
         }
     }
