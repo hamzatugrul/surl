@@ -2,8 +2,8 @@ package com.hamzatugrul.surl.controller;
 
 import com.hamzatugrul.surl.exception.InvalidURLException;
 import com.hamzatugrul.surl.exception.KeyNotFoundException;
-import com.hamzatugrul.surl.model.BaseResponse;
 import com.hamzatugrul.surl.model.ShortenerDTO;
+import com.hamzatugrul.surl.model.StatusDTO;
 import com.hamzatugrul.surl.service.UrlShortenerService;
 import com.hamzatugrul.surl.validator.SUrlValidator;
 import org.slf4j.Logger;
@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
@@ -32,7 +33,7 @@ public class ShortURLController {
 
     private static final Logger logger = LoggerFactory.getLogger(ShortURLController.class);
 
-    private final UrlShortenerService urlShortenerService;
+    private UrlShortenerService urlShortenerService;
 
     @Autowired
     public ShortURLController(UrlShortenerService urlShortenerService) {
@@ -40,13 +41,16 @@ public class ShortURLController {
     }
 
     @GetMapping("/{surl}")
-    public ModelAndView redirectShortUrl(@PathVariable String surl) throws InvalidURLException, KeyNotFoundException {
+    public void redirectShortUrl(@PathVariable String surl, HttpServletRequest request, HttpServletResponse response)
+            throws InvalidURLException, KeyNotFoundException
+    {
         SUrlValidator.checkShortURlKey(surl);
 
         final String longUrl = urlShortenerService.resolve(surl);
-        logger.info("Request for redirecting... ShortUrlKey={0} , ResolvedLongURL={1}", surl, longUrl);
+        logger.info("Request for redirecting... ShortUrlKey={} , ResolvedLongURL={}", surl, longUrl);
 
-        return new ModelAndView(String.format("redirect:%s", longUrl));
+        response.setHeader("Location", longUrl);
+        response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
     }
 
     @PostMapping(value = "/api/v1/shortener",
@@ -64,8 +68,13 @@ public class ShortURLController {
 
     @GetMapping(value = "/api/v1/status/{surl}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> getStatus(@PathVariable String surl) {
-        //TODO: getStatus
-        return null;
+    public ResponseEntity<StatusDTO> getStatus(@PathVariable String surl)
+            throws InvalidURLException, KeyNotFoundException
+    {
+        SUrlValidator.checkShortURlKey(surl);
+        StatusDTO status = urlShortenerService.getStatus(surl);
+        logger.info("Requested Status for ShortUrlKey={} , ResolvedLongURL={}", surl, status.getLongUrl());
+
+        return ResponseEntity.ok(status);
     }
 }

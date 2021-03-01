@@ -32,7 +32,6 @@ public class ShortUrlEntity implements Serializable {
 
     private List<VisitStatusEntity> visitStatusEntities = new ArrayList<>();
 
-
     public ShortUrlEntity() {
     }
 

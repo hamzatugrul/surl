@@ -4,15 +4,15 @@ package com.hamzatugrul.surl.model;
  * @author Hamza Tugrul Topcuoglu
  * @date 2/27/2021
  */
-public class BaseResponse {
+public class BaseErrorResponse {
 
     protected Integer code;
     protected String message;
 
-    public BaseResponse() {
+    public BaseErrorResponse() {
     }
 
-    public BaseResponse(Integer code, String message) {
+    public BaseErrorResponse(Integer code, String message) {
         this.message = message;
         this.code = code;
     }
