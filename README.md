@@ -1,5 +1,5 @@
 # SUrl
-SURL is a URL Shortener System which scale out unlimited horizontally.
+SURL is a URL Shortener System which is horizontally scalable unlimitedly.
 
 ### Technology Stack
 
