@@ -28,16 +28,16 @@ You need to have Java 8 jdk installed on you system.
     docker-compose up -d 
     ```
 
-4. To shortify a url:
+4. To shorten a long url:
 
     ```
     curl -v -H "Content-Type: application/json" -X POST -d '{"longUrl":"www.google.com"}' http://localhost:8080/api/v1/shortener
     ``` 
-5. To access your shorted url: (***SURL*** is the shorted code generated in the 4th step)
+5. To access your short url: (***SURL*** is the shorted code generated in the 4th step)
     ```
     curl -v -X GET http://localhost:8080/api/v1/{SURL}
     ```
-6. To access statistics for a short url:
+6. To access statistics for a short url with its key:
 
     ```
     curl -v  -H "Content-Type: application/json" -X GET http://localhost:8080/api/v1/stat/{SURL}
