@@ -6,6 +6,7 @@ SURL is a URL Shortener System which is horizontally scalable unlimitedly.
 * Java 8
 * Spring Boot
 * Spring Data MongoDB
+* Spring Security
 * JUnit
 * Mockito
 * Maven
