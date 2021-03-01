@@ -14,6 +14,9 @@ services:
       - mongodb
       - redis
     environment:
+        SURL_SERVICE_HOST: http://turkcell.s/
+        SPRING_REDIS_HOST: redis
+        SPRING_REDIS_PORT: 6379
         SPRING_DATA_MONGODB_URI: mongodb://mongodb/surl
         SPRING_APPLICATION_NAME: surl-service
     depends_on:
@@ -27,6 +30,9 @@ services:
       - mongodb
       - redis
     environment:
+        SURL_SERVICE_HOST: http://turkcell.s/
+        SPRING_REDIS_HOST: redis
+        SPRING_REDIS_PORT: 6379
         SPRING_DATA_MONGODB_URI: mongodb://mongodb/surl
         SPRING_APPLICATION_NAME: surl-service
     depends_on:
