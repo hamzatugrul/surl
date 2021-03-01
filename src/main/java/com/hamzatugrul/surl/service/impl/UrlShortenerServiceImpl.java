@@ -4,6 +4,7 @@ import com.hamzatugrul.surl.entity.ShortUrlEntity;
 import com.hamzatugrul.surl.entity.VisitStatusEntity;
 import com.hamzatugrul.surl.exception.KeyNotFoundException;
 import com.hamzatugrul.surl.model.ShortenerDTO;
+import com.hamzatugrul.surl.model.StatusDTO;
 import com.hamzatugrul.surl.repository.ShortUrlRepository;
 import com.hamzatugrul.surl.service.KeyGenerator;
 import com.hamzatugrul.surl.service.UrlShortenerService;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.LongSummaryStatistics;
 import java.util.Optional;
 
 /**
@@ -29,8 +31,8 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
     @Value("${surl.service.host}")
     private String serviceHost;
 
-    private final ShortUrlRepository shortUrlRepository;
-    private final KeyGenerator keyGenerator;
+    private ShortUrlRepository shortUrlRepository;
+    private KeyGenerator keyGenerator;
 
     @Autowired
     public UrlShortenerServiceImpl(ShortUrlRepository shortUrlRepository,
@@ -48,13 +50,15 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
 
         if (existingShortUrl.isPresent()) {
             logger.info("Short url is exist in DB and returning it. LongURL:" + shortenerDTO.getLongUrl());
+            shortenerDTO.setShortUrlKey(existingShortUrl.get().getShortUrlKey());
+            shortenerDTO.setShortURL(serviceHost + existingShortUrl.get().getShortUrlKey());
             shortenerDTO.setLongUrl(existingShortUrl.get().getLongUrl());
             return shortenerDTO;
         }
 
         String key = generateUniqueKey(shortenerDTO.getLongUrl());
         shortenerDTO.setShortUrlKey(key);
-        shortenerDTO.setShortUrlKey(serviceHost + "/" + key);
+        shortenerDTO.setShortURL(serviceHost + key);
 
         saveShortURL(key, shortenerDTO);
         return shortenerDTO;
@@ -62,13 +66,46 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
 
     @Override
     public String resolve(String surl) throws KeyNotFoundException {
-        ShortUrlEntity shortUrlEntity = Optional.ofNullable(shortUrlRepository.findByShortUrlKey(surl))
-                .orElseThrow(KeyNotFoundException::new);
+        ShortUrlEntity shortUrlEntity = findByShortUrl(surl);
 
         //TODO: This could be done in parallel thread in background
         updateStatus(shortUrlEntity);
 
         return shortUrlEntity.getLongUrl();
+    }
+
+    protected ShortUrlEntity findByShortUrl(String surl) throws KeyNotFoundException {
+        return Optional.ofNullable(shortUrlRepository.findByShortUrlKey(surl)).orElseThrow(KeyNotFoundException::new);
+
+/*        Optional<ShortUrlEntity> shortUrlEntity = Optional.ofNullable(shortUrlRepository.findByShortUrlKey(surl));
+
+        if (!shortUrlEntity.isPresent()) {
+            throw new KeyNotFoundException("Given Key did not found in Cache and DB.");
+        }
+
+        return shortUrlEntity.get();*/
+    }
+
+    @Override
+    public StatusDTO getStatus(String surl) throws KeyNotFoundException {
+        final ShortUrlEntity shortUrlEntity = findByShortUrl(surl);
+
+        LongSummaryStatistics statistics = shortUrlEntity.getVisitStatusEntities()
+                .stream()
+                .mapToLong(s -> s.getVisits())
+                .summaryStatistics();
+
+        StatusDTO status = new StatusDTO();
+        status.setShortUrlKey(shortUrlEntity.getShortUrlKey());
+        status.setShortURL(serviceHost + shortUrlEntity.getShortUrlKey());
+        status.setLongUrl(shortUrlEntity.getLongUrl());
+        status.setLastAccessDate(shortUrlEntity.getLastAccessDate());
+        status.setDailyAverage(statistics.getAverage());
+        status.setMax(statistics.getMax());
+        status.setMin(statistics.getMin());
+        status.setTotalPerYear(statistics.getSum());
+
+        return status;
     }
 
     private void updateStatus(ShortUrlEntity shortUrlEntity) {
@@ -108,7 +145,8 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
         //TODO: even it is rear case to happen, it could be check whether it is exist in DB.
         // If it is exist, can generate new hash with adding timespan or etc.
         // And Retry Mechanism can be added for checking newly generated value whether it is exist in DB
-        // Until getting unique key
+        // Until getting unique key.
+        // OR if master-slave structure will be added, can be try different hash mechanism with CDN.
         //shortUrlRepository.findByShortUrlKey(key);
 
         logger.info("Unique Key was generated:" + key);
