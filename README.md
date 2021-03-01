@@ -37,7 +37,7 @@ You need to have Java 8 jdk installed on you system.
     ```
     curl -v -X GET http://localhost:8080/api/v1/{SURL}
     ```
-6. To access analytics for a url:
+6. To access statistics for a short url:
 
     ```
     curl -v  -H "Content-Type: application/json" -X GET http://localhost:8080/api/v1/stat/{SURL}
