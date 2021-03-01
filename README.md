@@ -12,6 +12,10 @@ SURL is a URL Shortener System which scale out unlimited horizontally.
 * Docker
 * Redis
 * MongoDB
+* NGINX (Load Balancer)
+* Elasticsearch  * *has a issue in feature branch*
+* Logstash  * *has a issue in feature branch*
+* Kibana  * *has a issue in feature branch*
 
 ### Setup and Run
 
