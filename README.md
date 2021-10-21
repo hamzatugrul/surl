@@ -1,6 +1,29 @@
 # SUrl
 SURL is a URL Shortener System which scale out unlimited horizontally.
 
+In order to develop a new feature for the high traffic messaging service of the company, new URL Shortener system is needed. System should be designed such that it should respond very quickly to millions of requests. In addition, it should be unlimitedly scaled horizontally to meet increasing request traffic in the future.
+
+# System Architecture Diagram
+![designDocs/ArchitectureDiagram.PNG](designDocs/ArchitectureDiagram.PNG)
+
+# Message Flow Diagram
+You can see the message flow diagram to indicate messaging flow from client to backend systems as below
+
+![designDocs/MessageFlowDiagram.PNG](designDocs/MessageFlowDiagram.PNG)
+
+# High Level Design
+
+Key Components
+Following will be the key components in the URL shortening application:
+1.	Clients- Web Browsers/Mobile app. It will communicate with the backend servers via HTTP protocol
+2.	Load Balancer- To distribute the load evenly among the backend servers
+3.	Web Servers- Multiple instances of web servers will be deployed for horizontal scaling
+4.	Database - It will be used to store the mapping of long URLs to short URLs
+5.	Caching - We know that our database is going to be read heavily. So we have to find some way to speed up the reading process.
+
+
+![designDocs/HLD-Tech.PNG](designDocs/HLD-Tech.PNG)
+
 ### Technology Stack
 
 * Java 8
