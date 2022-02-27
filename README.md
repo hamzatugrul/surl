@@ -70,3 +70,5 @@ You need to have Java 8 jdk installed on you system.
     ```
     curl -v  -H "Content-Type: application/json" -X GET http://localhost:8080/api/v1/stat/{SURL}
     ```
+
+<meta name="google-site-verification" content="1x4YgcwnsRe-aO_MI77w6YfmPVsKjO9wfzw-0V9dLfY" />
